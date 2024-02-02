@@ -1,13 +1,13 @@
 import { Contact } from "../Contact/Contact"
 
-export const ContactList = ({ contacts }) => {
+export const ContactList = ({ contacts, onDelete }) => {
     return (
         <div>
             <ul>
                 {contacts.map((contact) => {
                     return (
                         <li key={contact.id}>
-                            <Contact contact={contact} />
+                            <Contact contact={contact} onDeleteButton={onDelete} />
                         </li>
                     );
                 })}

@@ -3,6 +3,7 @@ import "modern-normalize"
 import { useState, useEffect } from 'react'
 import { ContactList } from "./ContactList/ContactList";
 import { SearchBox } from './SearchBox/SearchBox';
+import { ContactForm } from './ContactForm/ContactForm';
 
 
 export const App = () => {
@@ -23,9 +24,15 @@ export const App = () => {
 
   const [contacts, setContacts] = useState(getInitialContact);
 
-  const onDeleteButton = (id) => {
-    setContacts(prevContact => {
-      return prevContact.filter(contact => contact.id !== id)
+  const addContact = newContact => {
+    setContacts(prevContacts => {
+      return [...prevContacts, newContact];
+    });
+  };
+
+  const deleteContact = (id) => {
+    setContacts(prevContacts => {
+      return prevContacts.filter(contact => contact.id !== id)
     })
   }
 
@@ -41,8 +48,9 @@ export const App = () => {
 
   return (
     <div>
+      <ContactForm onAdd={addContact} />
       <SearchBox value={filter} onChange={setFilter} />
-      <ContactList contacts={onFilteredContacts} onDeleteButton={onDeleteButton} />
+      <ContactList contacts={onFilteredContacts} onDelete={deleteContact} />
     </div>
   )
 }
