@@ -1,15 +1,15 @@
 import './App.css'
 import "modern-normalize"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ContactList } from "./ContactList/ContactList";
 import { SearchBox } from './SearchBox/SearchBox';
 
 
 export const App = () => {
   const getInitialContact = () => {
-    const savedContact = window.localStorage.getItem("savedContact");
-    if (savedContact !== null) {
-      return JSON.parse(savedContact)
+    const savedContacts = window.localStorage.getItem("saved-contacts");
+    if (savedContacts !== null) {
+      return JSON.parse(savedContacts)
     }
 
     return [
@@ -20,6 +20,7 @@ export const App = () => {
     ]
   }
 
+
   const [contacts, setContacts] = useState(getInitialContact);
 
   const onDeleteButton = (id) => {
@@ -28,14 +29,20 @@ export const App = () => {
     })
   }
 
+
+  useEffect(() => {
+    window.localStorage.setItem('saved-contacts', JSON.stringify(contacts));
+  }, [contacts]);
+
+
   const [filter, setFilter] = useState("");
 
-  const filteredContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase));
+  const onFilteredContacts = contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()));
 
   return (
     <div>
-      <ContactList contacts={filteredContacts} onDeleteButton={onDeleteButton} />
       <SearchBox value={filter} onChange={setFilter} />
+      <ContactList contacts={onFilteredContacts} onDeleteButton={onDeleteButton} />
     </div>
   )
 }
